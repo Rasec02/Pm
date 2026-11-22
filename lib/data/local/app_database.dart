@@ -76,14 +76,14 @@ class AppDatabase extends _$AppDatabase {
       );
 
   /// Seed inicial: 3 técnicos, umbral de stock bajo y repuestos de ejemplo.
-  /// Se ejecuta una sola vez, cuando se crea la base de datos.
+  /// Se ejecuta una sola vez, dentro de `onCreate`, al crear la base de datos.
   Future<void> _cargarDatosIniciales() async {
     for (final nombre in SeedData.tecnicos) {
       await into(tecnicos).insert(TecnicosCompanion.insert(nombre: nombre));
     }
 
     for (final repuesto in SeedData.repuestos) {
-      await into(this.repuestos).insert(
+      await into(repuestos).insert(
         RepuestosCompanion.insert(
           codigo: repuesto.codigo,
           nombre: repuesto.nombre,

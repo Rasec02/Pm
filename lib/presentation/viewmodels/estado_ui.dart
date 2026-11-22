@@ -20,8 +20,10 @@ class EstadoAccion {
 
   static const EstadoAccion inicial = EstadoAccion();
 
-  /// Devuelve el mensaje nuevo de una acción y lo consume para que no se
-  /// vuelva a mostrar en el siguiente rebuild.
+  /// Devuelve el mensaje nuevo de una acción.
+  ///
+  /// Compara con el estado anterior para que el `SnackBar` se muestre una sola
+  /// vez y no en cada rebuild.
   static String? procesarMensaje(
     EstadoAccion? anterior,
     EstadoAccion actual, {

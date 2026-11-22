@@ -121,7 +121,7 @@ class InventarioView extends ConsumerWidget {
   }
 }
 
-class _AlertaUmbral extends ConsumerWidget {
+class _AlertaUmbral extends StatelessWidget {
   const _AlertaUmbral({
     required this.umbral,
     required this.bajos,
@@ -133,7 +133,7 @@ class _AlertaUmbral extends ConsumerWidget {
   final int agotados;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final hayAlerta = bajos > 0;
     final color = hayAlerta ? AppColors.acento : AppColors.exito;
     return Card(
