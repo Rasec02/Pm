@@ -189,4 +189,51 @@ void main() {
       isTrue,
     );
   });
+
+  test('devolver un repuesto regresa el stock al inventario', () async {
+    final ordenId = await prepararOrden();
+    final tecnico = (await db.tecnicosDao.todos()).first;
+    await ordenes.tomar(ordenId: ordenId, tecnicoId: tecnico.id);
+
+    final repuesto = (await repuestos.todos())
+        .firstWhere((item) => item.codigo == 'DIS-SSD-480');
+    await ordenes.agregarRepuesto(
+      ordenId: ordenId,
+      repuestoId: repuesto.id,
+      cantidad: 3,
+    );
+    var detalle = await ordenes.detalle(ordenId);
+    expect(detalle!.repuestosUsados, hasLength(1));
+    expect(detalle.costo.repuestos, repuesto.precio * 3);
+
+    await ordenes.eliminarUsoRepuesto(detalle.repuestosUsados.first.id);
+
+    detalle = await ordenes.detalle(ordenId);
+    final actualizado = await repuestos.porId(repuesto.id);
+    expect(detalle!.repuestosUsados, isEmpty);
+    expect(detalle.costo.repuestos, 0);
+    expect(actualizado!.existencias, repuesto.existencias);
+  });
+
+  test('la carga de trabajo sólo cuenta órdenes abiertas del técnico',
+      () async {
+    final tecnico = (await db.tecnicosDao.todos()).first;
+    final ordenId = await prepararOrden();
+    await ordenes.tomar(ordenId: ordenId, tecnicoId: tecnico.id);
+
+    var cargas = await ordenes.watchCargaTrabajo().first;
+    var propia = cargas.firstWhere((carga) => carga.tecnico.id == tecnico.id);
+    expect(propia.total, 1);
+    expect(propia.enReparacion, 1);
+
+    await ordenes.cambiarEstado(ordenId: ordenId, destino: EstadoOrden.lista);
+    await ordenes.cambiarEstado(
+      ordenId: ordenId,
+      destino: EstadoOrden.entregada,
+    );
+
+    cargas = await ordenes.watchCargaTrabajo().first;
+    propia = cargas.firstWhere((carga) => carga.tecnico.id == tecnico.id);
+    expect(propia.total, 0);
+  });
 }

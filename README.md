@@ -155,11 +155,12 @@ lib/
 |---|------|----------------|
 | 1 | Recibir un equipo (Registro → Recibir equipo) | Orden creada en estado **Recibida**, sin responsable |
 | 2 | Abrir la orden y tomarla como técnico | Estado **En reparación** y responsable visible para todos |
-| 3 | Intentar tomarla con otro técnico | Mensaje de error: solo puede haber un responsable |
+| 3 | Volver a la orden desde la lista | El responsable ya no cambia y los botones de tomar desaparecen |
+| 3b | (Opcional, en dos emuladores) Tomar la misma orden a la vez | La condición atómica deja un solo responsable; el otro recibe un mensaje de error |
 | 4 | Agregar trabajo de mano de obra | Aparece en la lista y sube el subtotal de mano de obra |
 | 5 | Agregar repuesto (cantidad 1) | El stock baja en Inventario y sube el subtotal de repuestos |
 | 6 | Intentar agregar más repuestos que el stock | Mensaje de stock insuficiente, no se descuenta nada |
-| 7 | Ver el costo total | Mano de obra + repuestos en la tarjeta de la orden |
+| 7 | Bajar hasta **Costo total** en el detalle | Mano de obra + repuestos, calculados en la consulta de Drift |
 | 8 | Marcar **Lista** y luego **Entregada** | Cambian los estados y se guarda la fecha de entrega |
 | 9 | Abrir Historial → cliente y equipo | Se ve la reparación con su costo |
 | 10 | Cambiar el umbral en Inventario | La alerta de stock bajo se recalcula al instante |
@@ -204,9 +205,10 @@ lib/
 flutter test
 ```
 
-Los tests de `test/app_database_test.dart` cubren el seed, la toma única de una orden, el descuento
-de stock, la validación de stock insuficiente, el flujo de estados, el costo total, el historial y
-el umbral configurable. Usan una base de datos en memoria (`NativeDatabase.memory()`).
+Los 11 tests de `test/app_database_test.dart` cubren el seed, la toma única de una orden, el
+descuento de stock, la validación de stock insuficiente, la devolución de un repuesto al inventario,
+el flujo de estados, el costo total, el historial por equipo y por cliente, la carga de trabajo por
+técnico y el umbral configurable. Usan una base de datos en memoria (`NativeDatabase.memory()`).
 
 ## Notas de alcance
 
