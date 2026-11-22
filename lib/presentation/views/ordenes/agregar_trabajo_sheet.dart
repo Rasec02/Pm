@@ -9,7 +9,6 @@ import '../../widgets/formato_texto.dart';
 /// Abre el formulario para registrar mano de obra en una orden abierta.
 Future<void> mostrarAgregarTrabajoSheet(
   BuildContext context,
-  WidgetRef ref,
   Orden orden,
 ) {
   return showModalBottomSheet<void>(

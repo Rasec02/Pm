@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
 
   # Persistencia local (SQLite).
   # drift y drift_dev se mantienen en la MISMA línea de versión (2.28.x/2.29.x),

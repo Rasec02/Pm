@@ -14,7 +14,6 @@ import '../../widgets/formato_texto.dart';
 /// validarlo dentro de la transacción de Drift.
 Future<void> mostrarAgregarRepuestoSheet(
   BuildContext context,
-  WidgetRef ref,
   Orden orden,
 ) {
   return showModalBottomSheet<void>(

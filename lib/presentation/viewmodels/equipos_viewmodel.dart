@@ -57,5 +57,4 @@ class EquiposAccionesNotifier extends Notifier<EstadoAccion> {
       return false;
     }
   }
-
 }

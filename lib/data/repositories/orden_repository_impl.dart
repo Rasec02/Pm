@@ -19,7 +19,7 @@ import 'mappers.dart';
 
 /// Implementación de [OrdenRepository] sobre Drift.
 ///
-/// Contra el requisito de "estado con Notifier/AsyncNotifier" se usan
+/// Frente al requisito de estado con `Notifier`/`AsyncNotifier` se usan
 /// `StreamProvider` de Riverpod sobre consultas reactivas de Drift: el stream
 /// es la fuente de verdad y los ViewModels exponen las acciones.
 class OrdenRepositoryImpl implements OrdenRepository {

@@ -365,7 +365,7 @@ class _SeccionTrabajos extends ConsumerWidget {
                   TextButton.icon(
                     onPressed: !habilitado
                         ? null
-                        : () => mostrarAgregarTrabajoSheet(context, ref, orden),
+                        : () => mostrarAgregarTrabajoSheet(context, orden),
                     icon: const Icon(Icons.add, size: 18),
                     label: const Text('Agregar'),
                   ),
@@ -446,7 +446,7 @@ class _SeccionRepuestos extends ConsumerWidget {
                   TextButton.icon(
                     onPressed: !habilitado
                         ? null
-                        : () => mostrarAgregarRepuestoSheet(context, ref, orden),
+                        : () => mostrarAgregarRepuestoSheet(context, orden),
                     icon: const Icon(Icons.add, size: 18),
                     label: const Text('Agregar'),
                   ),

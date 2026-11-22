@@ -100,6 +100,7 @@ lib/
 │   ├── theme/app_theme.dart        # Colores, estados y tema Material 3
 │   └── utils/formato.dart          # Formato de dinero y fechas
 ├── domain/                         # Reglas de negocio, sin Flutter ni Drift
+│   ├── constants.dart              # Claves de configuración y umbral por defecto (3)
 │   ├── entities/                   # Cliente, Equipo, Técnico, Orden, Trabajo, Repuesto, Uso, Costo
 │   ├── enums/                      # EstadoOrden (flujo y transiciones), TipoEquipo
 │   ├── exceptions/                 # Errores de negocio con mensajes para la UI
@@ -186,8 +187,11 @@ lib/
    docs/screenshots/03-tomar-orden.png
    docs/screenshots/04-inventario-stock-bajo.png
    docs/screenshots/05-historial-equipo.png
-   docs/screenshots/06-carga-trabajo.png
+   docs/screenshots/06-historial-cliente.png
+   docs/screenshots/07-carga-trabajo.png
    ```
+
+   La descripción de cada captura está en `docs/screenshots/README.md`.
 
    Tómalas del emulador o del teléfono (`Ctrl+Shift+4`/`Power+Vol-`) y enlázalas en el README
    con `![Órdenes abiertas](docs/screenshots/01-ordenes-abiertas.png)`.
