@@ -134,8 +134,10 @@ lib/
   (tomar orden, descontar stock, cambiar estado, devolver repuesto). Los repositorios validan datos
   y convierten filas de Drift a entidades de dominio.
 - **presentation**: los widgets no contienen lógica de negocio; solo leen ViewModels
-  (`NotifierProvider` / `StreamProvider`) y llaman a sus métodos. El único `setState` es de
-  navegación (pestaña seleccionada) y de estado local de formularios (mostrar un error de validación).
+  (`NotifierProvider` / `StreamProvider`) y llaman a sus métodos. Los únicos `setState` son de
+  navegación (pestaña inferior seleccionada) y de estado puramente visual de los formularios
+  (qué cliente o equipo está elegido en un desplegable y el texto de error de validación); nunca
+  tocan la base de datos ni calculan reglas de negocio.
 
 ## Uso rápido (demo)
 

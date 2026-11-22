@@ -6,6 +6,7 @@ import '../../../domain/entities/equipo.dart';
 import '../../providers/catalogos_providers.dart';
 import '../../widgets/estado_carga.dart';
 import '../../widgets/estado_vacio.dart';
+import '../../widgets/error_vista.dart';
 import 'historial_cliente_view.dart';
 import 'historial_equipo_view.dart';
 
@@ -21,7 +22,10 @@ class HistorialView extends ConsumerWidget {
 
     return clientesAsync.when(
       loading: () => const EstadoCarga(mensaje: 'Cargando historial...'),
-      error: (error, _) => Center(child: Text('Error: $error')),
+      error: (error, _) => ErrorVista(
+        mensaje: 'No se pudo cargar el historial.\n$error',
+        onReintentar: () => ref.invalidate(clientesProvider),
+      ),
       data: (clientes) {
         if (clientes.isEmpty) {
           return const EstadoVacio(
@@ -33,7 +37,10 @@ class HistorialView extends ConsumerWidget {
         }
         return equiposAsync.when(
           loading: () => const EstadoCarga(mensaje: 'Cargando equipos...'),
-          error: (error, _) => Center(child: Text('Error: $error')),
+          error: (error, _) => ErrorVista(
+            mensaje: 'No se pudieron cargar los equipos.\n$error',
+            onReintentar: () => ref.invalidate(equiposProvider),
+          ),
           data: (equipos) => ListView.builder(
             padding: const EdgeInsets.only(top: 8, bottom: 96),
             itemCount: clientes.length,

@@ -219,6 +219,13 @@ class _SeccionAccionesEstado extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(ordenesAccionesProvider.notifier);
     final tecnicosAsync = ref.watch(tecnicosProvider);
+    // Mientras nadie haya tomado la orden, solo se permite cancelarla: pasar a
+    // `en reparación` implica asignar responsable.
+    final destinos = orden.tieneResponsable
+        ? orden.estado.siguientes
+        : orden.estado.siguientes
+            .where((destino) => destino == EstadoOrden.cancelada)
+            .toList();
 
     return Card(
       child: Padding(
@@ -273,7 +280,7 @@ class _SeccionAccionesEstado extends ConsumerWidget {
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
-            if (orden.estado.siguientes.isNotEmpty) ...[
+            if (destinos.isNotEmpty) ...[
               const Divider(height: 24),
               Text(
                 'Cambiar estado',
@@ -284,7 +291,7 @@ class _SeccionAccionesEstado extends ConsumerWidget {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  for (final destino in orden.estado.siguientes)
+                  for (final destino in destinos)
                     FilledButton.tonalIcon(
                       onPressed: !habilitado
                           ? null

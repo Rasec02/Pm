@@ -7,6 +7,7 @@ import '../../providers/catalogos_providers.dart';
 import '../../viewmodels/estado_ui.dart';
 import '../../viewmodels/ordenes_viewmodel.dart';
 import '../../widgets/estado_carga.dart';
+import '../../widgets/error_vista.dart';
 import '../registro/formulario_cliente.dart';
 import '../registro/formulario_equipo.dart';
 
@@ -44,10 +45,16 @@ class _NuevaOrdenViewState extends ConsumerState<NuevaOrdenView> {
       appBar: AppBar(title: const Text('Recibir equipo')),
       body: clientesAsync.when(
         loading: () => const EstadoCarga(mensaje: 'Cargando clientes...'),
-        error: (error, _) => Center(child: Text('Error: $error')),
+        error: (error, _) => ErrorVista(
+          mensaje: 'No se pudieron cargar los clientes.\n$error',
+          onReintentar: () => ref.invalidate(clientesProvider),
+        ),
         data: (clientes) => equiposAsync.when(
           loading: () => const EstadoCarga(mensaje: 'Cargando equipos...'),
-          error: (error, _) => Center(child: Text('Error: $error')),
+          error: (error, _) => ErrorVista(
+            mensaje: 'No se pudieron cargar los equipos.\n$error',
+            onReintentar: () => ref.invalidate(equiposProvider),
+          ),
           data: (equipos) => _formulario(context, clientes, equipos, acciones),
         ),
       ),
