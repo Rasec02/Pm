@@ -1,0 +1,18 @@
+# Configuración de análisis estático del proyecto.
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    # Código generado por build_runner (Drift).
+    - "**/*.g.dart"
+    - "build/**"
+
+linter:
+  rules:
+    prefer_single_quotes: true
+    avoid_print: true
+    # Se desactivan solo preferencias estéticas de `const`: el proyecto ya usa
+    # const de forma explícita y estas reglas no aportan corrección.
+    prefer_const_constructors: false
+    prefer_const_constructors_in_immutables: false
+    prefer_const_literals_to_create_immutables: false
