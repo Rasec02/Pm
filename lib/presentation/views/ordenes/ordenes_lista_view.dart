@@ -79,7 +79,9 @@ class OrdenesListaView extends ConsumerWidget {
                 );
               }
               return RefreshIndicator(
-                onRefresh: () async => ref.invalidate(ordenesAbiertasProvider),
+                onRefresh: () async {
+                  ref.invalidate(ordenesAbiertasProvider);
+                },
                 child: ListView.builder(
                   padding: const EdgeInsets.only(bottom: 96),
                   itemCount: abiertas.length,

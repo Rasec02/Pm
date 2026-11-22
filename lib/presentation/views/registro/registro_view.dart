@@ -9,6 +9,8 @@ import '../../viewmodels/estado_ui.dart';
 import '../../widgets/estado_carga.dart';
 import '../../widgets/estado_vacio.dart';
 import '../../widgets/error_vista.dart';
+import '../historial/historial_cliente_view.dart';
+import '../historial/historial_equipo_view.dart';
 import '../ordenes/nueva_orden_view.dart';
 import 'formulario_cliente.dart';
 import 'formulario_equipo.dart';
@@ -129,6 +131,18 @@ class _TarjetaCliente extends ConsumerWidget {
                           label: const Text('Recibir equipo'),
                         ),
                         TextButton.icon(
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => HistorialClienteView(
+                                clienteId: cliente.id,
+                                titulo: cliente.nombre,
+                              ),
+                            ),
+                          ),
+                          icon: const Icon(Icons.history, size: 18),
+                          label: const Text('Historial'),
+                        ),
+                        TextButton.icon(
                           onPressed: () => _editar(context),
                           icon: const Icon(Icons.edit_outlined, size: 18),
                           label: const Text('Editar'),
@@ -197,6 +211,14 @@ class _FilaEquipo extends StatelessWidget {
       title: Text(equipo.descripcion),
       subtitle: Text('Serie: ${equipo.numeroSerie}'),
       trailing: const Icon(Icons.chevron_right, size: 18),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => HistorialEquipoView(
+            equipoId: equipo.id,
+            titulo: equipo.descripcion,
+          ),
+        ),
+      ),
     );
   }
 }

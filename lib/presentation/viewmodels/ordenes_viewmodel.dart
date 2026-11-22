@@ -148,7 +148,6 @@ class OrdenesAccionesNotifier extends Notifier<EstadoAccion> {
     );
   }
 
-
   Future<bool> _ejecutar(
     Future<void> Function() accion, {
     required String exito,

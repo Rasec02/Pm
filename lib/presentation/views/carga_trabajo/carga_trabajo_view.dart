@@ -25,7 +25,8 @@ class CargaTrabajoView extends ConsumerWidget {
         mensaje: 'No se pudo calcular la carga de trabajo.\n$error',
         onReintentar: () => ref.invalidate(cargaTrabajoProvider),
       ),
-      data: (cargas) {
+      data: (resumen) {
+        final cargas = resumen.cargas;
         if (cargas.isEmpty) {
           return const EstadoVacio(
             icono: Icons.groups_outlined,
@@ -33,13 +34,56 @@ class CargaTrabajoView extends ConsumerWidget {
             detalle: 'La base de datos crea 3 técnicos al instalarse.',
           );
         }
-        return ListView.builder(
+        return ListView(
           padding: const EdgeInsets.only(top: 8, bottom: 96),
-          itemCount: cargas.length,
-          itemBuilder: (context, index) =>
-              _TarjetaCarga(carga: cargas[index]),
+          children: [
+            _ResumenTaller(resumen: resumen),
+            for (final carga in cargas) _TarjetaCarga(carga: carga),
+          ],
         );
       },
+    );
+  }
+}
+
+/// Encabezado con el total de órdenes abiertas del taller.
+class _ResumenTaller extends StatelessWidget {
+  const _ResumenTaller({required this.resumen});
+
+  final CargaTrabajoResumen resumen;
+
+  @override
+  Widget build(BuildContext context) {
+    final masCargado = resumen.masCargado;
+    return Card(
+      color: AppColors.primario.withValues(alpha: 0.08),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          children: [
+            const Icon(Icons.groups, color: AppColors.primarioOscuro),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${resumen.totalOrdenes} orden(es) abiertas en el taller',
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  Text(
+                    masCargado == null
+                        ? 'Todos los técnicos están libres.'
+                        : 'Mayor carga: ${masCargado.tecnico.nombre} '
+                            '(${masCargado.total})',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

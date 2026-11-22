@@ -61,7 +61,6 @@ class ClientesAccionesNotifier extends Notifier<EstadoAccion> {
     );
   }
 
-
   Future<bool> _ejecutar(
     Future<void> Function() accion, {
     required String exito,

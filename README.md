@@ -30,6 +30,10 @@ sin internet.
 | `build_runner` | Genera `*.g.dart` (no se versionan) |
 | `flutter_lints` | Reglas de `flutter analyze` |
 
+Versiones fijadas en `android/`: Gradle 8.12, AGP 8.9.1 y Kotlin 2.1.0. Si tu instalación de
+Flutter espera otras, cámbialas en `android/gradle/wrapper/gradle-wrapper.properties` y en
+`android/settings.gradle.kts`.
+
 Drift se abre con `NativeDatabase.createInBackground`, por lo que las consultas se ejecutan en un
 isolate aparte y no bloquean la interfaz del taller.
 
@@ -82,8 +86,9 @@ relacionado con la versión de Java, apunta Gradle a un **JDK 17–21**:
    flutter run
    ```
 
-Verifica la versión con `java -version`. Con JDK 25 instalado, el proyecto **compila igualmente**
-si tu versión de Flutter/AGP ya lo soporta; el cambio solo es necesario si Gradle se queja.
+Verifica la versión con `java -version`. Con JDK 25 instalado el proyecto compila igualmente si tu
+versión de Flutter y de AGP (8.9.1 en este proyecto) ya lo soportan; el cambio solo es necesario si
+Gradle se queja de la versión de Java.
 
 ## Estructura del proyecto
 
@@ -93,7 +98,7 @@ lib/
 ├── app.dart                        # MaterialApp + tema
 ├── core/
 │   ├── theme/app_theme.dart        # Colores, estados y tema Material 3
-│   └── utils/formato.dart          # Formato de dinero, fechas y números
+│   └── utils/formato.dart          # Formato de dinero y fechas
 ├── domain/                         # Reglas de negocio, sin Flutter ni Drift
 │   ├── entities/                   # Cliente, Equipo, Técnico, Orden, Trabajo, Repuesto, Uso, Costo
 │   ├── enums/                      # EstadoOrden (flujo y transiciones), TipoEquipo
@@ -105,13 +110,13 @@ lib/
 │   │   ├── tables/                 # Definición de tablas SQLite
 │   │   ├── daos/                   # Consultas y transacciones por agregado
 │   │   ├── seed/seed_data.dart     # Técnicos y repuestos iniciales
-│   │   └── app_database.dart       # @DriftDatabase, migración y seed
+│   │   └── app_database.dart       # @DriftDatabase, migración y seed inicial
 │   ├── models/                     # Resultados de joins (orden + equipo + dueño + técnico)
 │   └── repositories/               # Implementación de los contratos + mappers
 └── presentation/                   # MVVM con Riverpod
     ├── providers/                  # Base de datos, repositorios, casos de uso y catálogos
-    ├── viewmodels/                 # Notifier/StreamProvider por feature
-    ├── widgets/                    # Componentes reutilizables (tarjetas, badges, selectores)
+    ├── viewmodels/                 # Notifier/StreamProvider por feature (incluye InventarioViewModel)
+    ├── widgets/                    # Tarjetas, badges, selectores y formateadores de entrada
     └── views/                      # Pantallas
         ├── ordenes/                # Lista, detalle, nueva orden, hojas de trabajo y repuesto
         ├── carga_trabajo/          # Carga por técnico
