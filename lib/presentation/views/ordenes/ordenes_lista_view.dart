@@ -10,7 +10,6 @@ import '../../widgets/selector_estado.dart';
 import '../../widgets/selector_tecnico.dart';
 import '../../widgets/tarjeta_orden.dart';
 import 'detalle_orden_view.dart';
-import 'nueva_orden_view.dart';
 
 /// Pantalla principal: órdenes abiertas con filtros por estado y técnico.
 class OrdenesListaView extends ConsumerWidget {
@@ -104,11 +103,4 @@ class OrdenesListaView extends ConsumerWidget {
       ],
     );
   }
-}
-
-/// Abre el formulario de nueva orden (se usa desde la pantalla de registro).
-Future<void> abrirNuevaOrden(BuildContext context) {
-  return Navigator.of(context).push(
-    MaterialPageRoute<void>(builder: (_) => const NuevaOrdenView()),
-  );
 }

@@ -139,7 +139,8 @@ class OrdenesDao extends DatabaseAccessor<AppDatabase>
   /// La condición `tecnico_id IS NULL AND estado = 'recibida'` dentro de la
   /// misma sentencia garantiza que dos técnicos no puedan tomarla a la vez:
   /// solo la primera actualización afecta una fila. Si no afecta ninguna fila,
-  /// se lanza [OrdenYaTomadaException].
+  /// se lanza `OrdenYaTomadaError`, que el repositorio traduce a
+  /// `OrdenYaTomadaException` con el técnico actual.
   Future<void> tomar({
     required int ordenId,
     required int tecnicoId,

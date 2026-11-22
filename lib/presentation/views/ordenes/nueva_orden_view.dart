@@ -247,3 +247,10 @@ class _SeccionTitulo extends StatelessWidget {
     );
   }
 }
+
+/// Abre el formulario de nueva orden desde la pantalla de registro.
+Future<void> abrirNuevaOrden(BuildContext context) {
+  return Navigator.of(context).push(
+    MaterialPageRoute<void>(builder: (_) => const NuevaOrdenView()),
+  );
+}
