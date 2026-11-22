@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/formato.dart';
 import '../../../domain/entities/repuesto.dart';
-import '../../providers/catalogos_providers.dart';
 import '../../viewmodels/estado_ui.dart';
 import '../../viewmodels/inventario_viewmodel.dart';
 import '../../widgets/estado_carga.dart';
@@ -19,8 +18,7 @@ class InventarioView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final repuestosAsync = ref.watch(repuestosProvider);
-    final umbral = ref.watch(umbralActualProvider);
+    final inventarioAsync = ref.watch(inventarioViewModelProvider);
 
     ref.listen<EstadoAccion>(inventarioAccionesProvider, (anterior, actual) {
       final mensaje = EstadoAccion.procesarMensaje(
@@ -41,71 +39,13 @@ class InventarioView extends ConsumerWidget {
     });
 
     return Scaffold(
-      body: repuestosAsync.when(
+      body: inventarioAsync.when(
         loading: () => const EstadoCarga(mensaje: 'Cargando inventario...'),
         error: (error, _) => ErrorVista(
           mensaje: 'No se pudo cargar el inventario.\n$error',
-          onReintentar: () => ref.invalidate(repuestosProvider),
+          onReintentar: () => ref.invalidate(inventarioViewModelProvider),
         ),
-        data: (repuestos) {
-          final bajos = repuestos
-              .where((repuesto) => repuesto.esStockBajo(umbral))
-              .toList()
-            ..sort((a, b) => a.existencias.compareTo(b.existencias));
-          final agotados = bajos.where((repuesto) => repuesto.agotado).length;
-
-          return ListView(
-            padding: const EdgeInsets.only(bottom: 96),
-            children: [
-              _AlertaUmbral(
-                umbral: umbral,
-                bajos: bajos.length,
-                agotados: agotados,
-              ),
-              if (bajos.isNotEmpty) ...[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-                  child: Text(
-                    'Repuestos por agotarse',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall
-                        ?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                ),
-                for (final repuesto in bajos)
-                  _TarjetaRepuesto(
-                    repuesto: repuesto,
-                    umbral: umbral,
-                    resaltado: true,
-                  ),
-                const Divider(height: 24),
-              ],
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                child: Text(
-                  'Inventario completo (${repuestos.length})',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(fontWeight: FontWeight.w700),
-                ),
-              ),
-              if (repuestos.isEmpty)
-                const EstadoVacio(
-                  icono: Icons.inventory_2_outlined,
-                  titulo: 'Inventario vacío',
-                  detalle: 'Agrega el primer repuesto con el botón +.',
-                ),
-              for (final repuesto in repuestos)
-                _TarjetaRepuesto(
-                  repuesto: repuesto,
-                  umbral: umbral,
-                  resaltado: false,
-                ),
-            ],
-          );
-        },
+        data: (inventario) => _ContenidoInventario(inventario: inventario),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
@@ -117,6 +57,69 @@ class InventarioView extends ConsumerWidget {
         icon: const Icon(Icons.add),
         label: const Text('Nuevo repuesto'),
       ),
+    );
+  }
+}
+
+/// Lista del inventario con la alerta de stock bajo arriba.
+class _ContenidoInventario extends StatelessWidget {
+  const _ContenidoInventario({required this.inventario});
+
+  final InventarioViewModel inventario;
+
+  @override
+  Widget build(BuildContext context) {
+    final umbral = inventario.umbral;
+    return ListView(
+      padding: const EdgeInsets.only(bottom: 96),
+      children: [
+        _AlertaUmbral(
+          umbral: umbral,
+          bajos: inventario.porAgotarse.length,
+          agotados: inventario.agotados,
+        ),
+        if (inventario.hayAlerta) ...[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+            child: Text(
+              'Repuestos por agotarse',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall
+                  ?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ),
+          for (final repuesto in inventario.porAgotarse)
+            _TarjetaRepuesto(
+              repuesto: repuesto,
+              umbral: umbral,
+              resaltado: true,
+            ),
+          const Divider(height: 24),
+        ],
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+          child: Text(
+            'Inventario completo (${inventario.repuestos.length})',
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(fontWeight: FontWeight.w700),
+          ),
+        ),
+        if (inventario.repuestos.isEmpty)
+          const EstadoVacio(
+            icono: Icons.inventory_2_outlined,
+            titulo: 'Inventario vacío',
+            detalle: 'Agrega el primer repuesto con el botón +.',
+          ),
+        for (final repuesto in inventario.repuestos)
+          _TarjetaRepuesto(
+            repuesto: repuesto,
+            umbral: umbral,
+            resaltado: false,
+          ),
+      ],
     );
   }
 }

@@ -8,8 +8,7 @@ import '../../viewmodels/equipos_viewmodel.dart';
 ///
 /// Devuelve el id del equipo creado, o `null` si se canceló.
 Future<int?> mostrarFormularioEquipo(
-  BuildContext context,
-  WidgetRef ref, {
+  BuildContext context, {
   required int clienteId,
 }) {
   return showDialog<int>(

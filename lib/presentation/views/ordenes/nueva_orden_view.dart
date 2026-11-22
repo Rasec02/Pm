@@ -103,7 +103,7 @@ class _NuevaOrdenViewState extends ConsumerState<NuevaOrdenView> {
               ),
             TextButton.icon(
               onPressed: () async {
-                final creado = await mostrarFormularioCliente(context, ref);
+                final creado = await mostrarFormularioCliente(context);
                 if (creado != null) {
                   setState(() {
                     _clienteId = creado;
@@ -151,7 +151,6 @@ class _NuevaOrdenViewState extends ConsumerState<NuevaOrdenView> {
                 onPressed: () async {
                   final creado = await mostrarFormularioEquipo(
                     context,
-                    ref,
                     clienteId: _clienteId!,
                   );
                   if (creado != null) {

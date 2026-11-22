@@ -3,16 +3,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../viewmodels/clientes_viewmodel.dart';
 
-/// Muestra el formulario de alta de cliente.
+/// Muestra el formulario de alta o edición de un cliente.
 ///
-/// Devuelve el id del cliente creado, o `null` si se canceló.
+/// Devuelve el id del cliente guardado, o `null` si se canceló.
 Future<int?> mostrarFormularioCliente(
-  BuildContext context,
-  WidgetRef ref,
-) async {
+  BuildContext context, {
+  int? clienteId,
+  String? nombreInicial,
+  String? telefonoInicial,
+}) {
   return showDialog<int>(
     context: context,
-    builder: (_) => const DialogoCliente(),
+    builder: (_) => DialogoCliente(
+      clienteId: clienteId,
+      nombreInicial: nombreInicial,
+      telefonoInicial: telefonoInicial,
+    ),
   );
 }
 

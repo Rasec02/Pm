@@ -59,9 +59,7 @@ class RegistroView extends ConsumerWidget {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          mostrarFormularioCliente(context, ref);
-        },
+        onPressed: () => mostrarFormularioCliente(context),
         icon: const Icon(Icons.person_add_alt),
         label: const Text('Nuevo cliente'),
       ),
@@ -118,13 +116,10 @@ class _TarjetaCliente extends ConsumerWidget {
                       runSpacing: 4,
                       children: [
                         TextButton.icon(
-                          onPressed: () {
-                            mostrarFormularioEquipo(
-                              context,
-                              ref,
-                              clienteId: cliente.id,
-                            );
-                          },
+                          onPressed: () => mostrarFormularioEquipo(
+                            context,
+                            clienteId: cliente.id,
+                          ),
                           icon: const Icon(Icons.add, size: 18),
                           label: const Text('Agregar equipo'),
                         ),
@@ -134,7 +129,7 @@ class _TarjetaCliente extends ConsumerWidget {
                           label: const Text('Recibir equipo'),
                         ),
                         TextButton.icon(
-                          onPressed: () => _editar(context, ref),
+                          onPressed: () => _editar(context),
                           icon: const Icon(Icons.edit_outlined, size: 18),
                           label: const Text('Editar'),
                         ),
@@ -155,14 +150,12 @@ class _TarjetaCliente extends ConsumerWidget {
     );
   }
 
-  Future<int?> _editar(BuildContext context, WidgetRef ref) {
-    return showDialog<int>(
-      context: context,
-      builder: (_) => DialogoCliente(
-        clienteId: cliente.id,
-        nombreInicial: cliente.nombre,
-        telefonoInicial: cliente.telefono,
-      ),
+  Future<int?> _editar(BuildContext context) {
+    return mostrarFormularioCliente(
+      context,
+      clienteId: cliente.id,
+      nombreInicial: cliente.nombre,
+      telefonoInicial: cliente.telefono,
     );
   }
 
